@@ -29,7 +29,10 @@ export const splitImage = (imgSrc, rows, cols) => {
           pieces.push(canvas.toDataURL())
         }
       }
-      resolve(pieces)
+      resolve({
+        pieces,
+        aspectRatio: img.width / img.height
+      })
     }
   })
 }

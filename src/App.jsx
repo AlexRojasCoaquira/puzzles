@@ -20,10 +20,12 @@ import { splitImage, shuffleArray } from './utils/images'
 
 function App() {
   const [pieces, setPieces] = useState([])
+  const [aspectRatio, setAspectRatio] = useState(1)
   useEffect(() => {
-    splitImage('./prueba.jpg', 3, 3).then((pieces) => {
-      const shuffledPieces = shuffleArray(pieces)
+    splitImage('./prueba.jpg', 3, 3).then((result) => {
+      const shuffledPieces = shuffleArray(result.pieces)
       setPieces(shuffledPieces)
+      setAspectRatio(result.aspectRatio)
     })
   }, [])
   return (
@@ -39,9 +41,24 @@ function App() {
           />
         ))}
       </div>
-      <div className="border">
-        <h3>Ordena las piezas y descubre la imagen</h3>
-        <div className="grid grid-cols-8 gap-4">Mi pluzzle</div>
+      <div className="max-w-2xl w-full">
+        <h3 className="text-center mb-3 text-lg font-bold">
+          Ordena las piezas y descubre la imagen
+        </h3>
+        <div
+          className="grid grid-cols-3 grid-rows-3 w-full gap-3"
+          style={{ aspectRatio }}
+        >
+          <div className="border w-full h-g">a</div>
+          <div className="border">a</div>
+          <div className="border">a</div>
+          <div className="border">a</div>
+          <div className="border">a</div>
+          <div className="border">a</div>
+          <div className="border">a</div>
+          <div className="border">a</div>
+          <div className="border">a</div>
+        </div>
       </div>
     </div>
   )
