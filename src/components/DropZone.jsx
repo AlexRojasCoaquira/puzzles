@@ -10,7 +10,7 @@ export function DropZone({ aspectRatio }) {
     >
       {zones.map((zone, index) => (
         <div
-          className="border"
+          className={`${zone ? '' : 'border'}`}
           key={index}
           ref={(el) => (dropZones.current[index] = el)}
         >
@@ -18,6 +18,7 @@ export function DropZone({ aspectRatio }) {
             <img
               src={zone}
               alt={`piece ${index}`}
+              className="w-full h-full object-cover"
             />
           ) : null}
         </div>

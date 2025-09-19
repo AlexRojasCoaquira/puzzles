@@ -1,25 +1,30 @@
 import { createRef, useContext } from 'react'
 import { DropZoneContext } from '../context/dropZone'
 import DraggablePiece from './DraggablePiece'
+import { Carousel } from './Carousel'
 
 export function Pieces({ pieces }) {
   const { zones } = useContext(DropZoneContext)
-
+  console.log('zones', zones)
   const filteredPieces = pieces.filter((src) => !zones.includes(src))
   return (
-    <div className="grid grid-cols-4 sm:grid-cols-6 gap-3 border max-w-2xl w-full justify-around p-2">
+    <Carousel>
       {filteredPieces.map((src, i) => {
         const ref = createRef()
         return (
-          <DraggablePiece
+          <div
             key={src}
-            ref={ref}
-            src={src}
-            alt={`pieza ${i}`}
-            pieceIndex={i}
-          />
+            className="snap-start shrink-0"
+          >
+            <DraggablePiece
+              ref={ref}
+              src={src}
+              alt={`pieza ${i}`}
+              pieceIndex={i}
+            />
+          </div>
         )
       })}
-    </div>
+    </Carousel>
   )
 }
