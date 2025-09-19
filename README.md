@@ -4,4 +4,6 @@ Este proyecto se creará un pluzzle de una imagen, donde inicialmente estará re
 [✅] Crear lienzo del pluzzle
 [✅] Crear divisiones de los lienzos
 [✅] Agregar la funcionalidad de ser draggable
+[✅] Agregar carousel en sección de piezas
+[✅] Hacer que el draggable salga del contendor hacia el dropzone
 [] Validar que el orden esté correcto

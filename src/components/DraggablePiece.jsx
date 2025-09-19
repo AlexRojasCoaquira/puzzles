@@ -1,24 +1,38 @@
 import { forwardRef, useContext, useState } from 'react'
+import { createPortal } from 'react-dom'
 import Draggable from 'react-draggable'
 import { DropZoneContext } from '../context/dropZone'
-function DraggablePiece({ src, alt, pieceIndex }, ref) {
+function DraggablePiece({ src, alt }, ref) {
   const { dropZones, setZones } = useContext(DropZoneContext)
   const [position, setPosition] = useState({ x: 0, y: 0 })
-  const handleStop = (e, data, pieceIndex) => {
-    const pieceRect = data.node.getBoundingClientRect()
-    const x = pieceRect.left + pieceRect.width / 2
-    const y = pieceRect.top + pieceRect.height / 2
-    console.log(pieceIndex)
+  const [isDragging, setIsDragging] = useState(false)
+  const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 })
+  const [imageSize, setImageSize] = useState({ width: 0, height: 0 })
+
+  const handleStart = (e) => {
+    console.log('Starting drag')
+    const rect = ref.current?.getBoundingClientRect()
+    console.log('rect', rect)
+    if (rect) {
+      setImageSize({ width: rect.width, height: rect.height })
+    }
+    setDragPosition({ x: e.clientX, y: e.clientY })
+    setIsDragging(true)
+  }
+
+  const handleStop = (e) => {
+    const cx = e.clientX
+    const cy = e.clientY
 
     let targetIndex = -1
     dropZones.current.some((zone, i) => {
+      //iteramos sobre los dropZones para ver si la pieza está en alguno de ellos
       if (!zone) return false
       const zoneRect = zone.getBoundingClientRect()
-
       const isInZone =
-        x > zoneRect.left && x < zoneRect.right && y > zoneRect.top && y < zoneRect.bottom
-
+        cx > zoneRect.left && cx < zoneRect.right && cy > zoneRect.top && cy < zoneRect.bottom
       if (isInZone) {
+        // si está en el dropZone, entonces targetIndex es el índice del dropZone
         targetIndex = i
         return true
       }
@@ -26,34 +40,63 @@ function DraggablePiece({ src, alt, pieceIndex }, ref) {
     })
 
     if (targetIndex !== -1) {
+      //encontró un lugar para la pieza
       setZones((prev) => {
         const newZones = [...prev]
-        console.log('newZones', newZones)
         const prevIdx = newZones.findIndex((zone) => zone === src)
         if (prevIdx !== -1) newZones[prevIdx] = null
         newZones[targetIndex] = src
         return newZones
       })
-      return
+    } else {
+      setPosition({ x: 0, y: 0 })
     }
-    setPosition({ x: 0, y: 0 })
+
+    console.log('Stopping drag')
+    setIsDragging(false)
   }
   return (
-    <Draggable
-      nodeRef={ref}
-      position={position}
-      onDrag={(e, data) => setPosition({ x: data.x, y: data.y })}
-      onStop={(e, data) => handleStop(e, data, pieceIndex)}
-    >
-      <img
-        ref={ref}
-        src={src}
-        alt={alt}
-        draggable={false}
-        onDragStart={(e) => e.preventDefault()}
-        className="max-w-40 w-full cursor-grab"
-      />
-    </Draggable>
+    <>
+      <Draggable
+        nodeRef={ref}
+        position={position}
+        onStart={handleStart}
+        onDrag={(e, data) => {
+          setPosition({ x: data.x, y: data.y })
+          setDragPosition({ x: e.clientX, y: e.clientY })
+        }}
+        onStop={(e, data) => handleStop(e, data)}
+      >
+        <img
+          ref={ref}
+          src={src}
+          alt={alt}
+          draggable={false}
+          onDragStart={(e) => e.preventDefault()}
+          className="relative max-w-40 w-full cursor-grab select-none"
+          style={{ opacity: isDragging ? 1 : 1 }}
+        />
+      </Draggable>
+
+      {isDragging &&
+        createPortal(
+          <img
+            src={src}
+            alt={alt}
+            draggable={false}
+            style={{
+              position: 'fixed',
+              left: `${dragPosition.x - imageSize.width / 2}px`,
+              top: `${dragPosition.y - imageSize.height / 2}px`,
+              width: `${imageSize.width}px`,
+              height: `${imageSize.height}px`,
+              pointerEvents: 'none',
+              zIndex: 99999
+            }}
+          />,
+          document.body
+        )}
+    </>
   )
 }
 

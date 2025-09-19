@@ -20,7 +20,6 @@ export function Pieces({ pieces }) {
               ref={ref}
               src={src}
               alt={`pieza ${i}`}
-              pieceIndex={i}
             />
           </div>
         )

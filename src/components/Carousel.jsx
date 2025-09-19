@@ -31,7 +31,7 @@ export function Carousel({ children, step = 300 }) {
 
       <div
         ref={trackRef}
-        className="flex gap-3 max-w-2xl  overflow-x-auto scrollbar-hide p-2  snap-x snap-mandatory"
+        className="carousel-track flex gap-3 max-w-2xl  overflow-x-auto scrollbar-hide p-2 snap-x snap-mandatory"
       >
         {children}
       </div>
