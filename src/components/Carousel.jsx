@@ -16,7 +16,7 @@ export function Carousel({ children, step = 300 }) {
 
   return (
     <div
-      className="relative px-2 border rounded-lg"
+      className="relative px-2 border rounded-lg h-full"
       onKeyDown={onKeyDown} // para que funcione el scroll por teclado
       tabIndex={0}
     >

@@ -8,6 +8,8 @@ function DraggablePiece({ src, alt }, ref) {
   const [isDragging, setIsDragging] = useState(false)
   const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 })
   const [imageSize, setImageSize] = useState({ width: 0, height: 0 })
+  const getPoint = (e) =>
+    'touches' in e ? e.touches[0] : 'changedTouches' in e ? e.changedTouches[0] : e
 
   const handleStart = (e) => {
     console.log('Starting drag')
@@ -16,13 +18,14 @@ function DraggablePiece({ src, alt }, ref) {
     if (rect) {
       setImageSize({ width: rect.width, height: rect.height })
     }
-    setDragPosition({ x: e.clientX, y: e.clientY })
+    const p = getPoint(e)
+    setDragPosition({ x: p.clientX, y: p.clientY })
     setIsDragging(true)
   }
 
   const handleStop = (e) => {
-    const cx = e.clientX
-    const cy = e.clientY
+    const cx = dragPosition.x
+    const cy = dragPosition.y
 
     let targetIndex = -1
     dropZones.current.some((zone, i) => {
@@ -62,8 +65,9 @@ function DraggablePiece({ src, alt }, ref) {
         position={position}
         onStart={handleStart}
         onDrag={(e, data) => {
+          const p = getPoint(e)
           setPosition({ x: data.x, y: data.y })
-          setDragPosition({ x: e.clientX, y: e.clientY })
+          setDragPosition({ x: p.clientX, y: p.clientY })
         }}
         onStop={(e, data) => handleStop(e, data)}
       >
@@ -73,7 +77,7 @@ function DraggablePiece({ src, alt }, ref) {
           alt={alt}
           draggable={false}
           onDragStart={(e) => e.preventDefault()}
-          className="relative max-w-30 sm:max-w-40 w-full cursor-grab select-none"
+          className="relative touch-none max-w-30 sm:max-w-40 w-full cursor-grab select-none"
           style={{ opacity: isDragging ? 0 : 1 }}
         />
       </Draggable>
