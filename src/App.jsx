@@ -5,8 +5,8 @@ import { usePieces } from './hooks/usePieces'
 import { Pieces } from './components/Pieces'
 
 function App() {
-  const rows = 3
-  const cols = 3
+  const rows = 5
+  const cols = 5
   const { pieces, aspectRatio } = usePieces({ rows, cols })
   return (
     <DropZoneProvider

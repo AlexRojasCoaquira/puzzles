@@ -110,7 +110,7 @@ function DraggablePiece({ src, alt, isInDropZone = false, zoneIndex = -1 }, ref)
           draggable={false}
           onDragStart={(e) => e.preventDefault()}
           className={`relative touch-none w-full cursor-grab select-none ${
-            isInDropZone ? 'h-full object-cover cursor-move' : 'max-w-30 sm:max-w-40'
+            isInDropZone ? 'h-full object-cover cursor-move' : 'max-w-30 sm:max-w-30'
           }`}
           style={{ opacity: isDragging ? 0 : 1 }}
         />
