@@ -5,7 +5,7 @@ import { usePieces } from './hooks/usePieces'
 import { Pieces } from './components/Pieces'
 import { DropZoneContext } from './context/dropZone'
 function App() {
-  const { setSizeCanvas } = useContext(DropZoneContext)
+  const { setSizeCanvas, isZonesCorrect } = useContext(DropZoneContext)
   const { pieces, aspectRatio } = usePieces()
   const [isSelected, setIsSelected] = useState(false)
 
@@ -15,7 +15,7 @@ function App() {
   }
   return (
     <div className="flex gap-4 flex-col items-center h-100dvh p-4">
-      <h1 className="text-4xl font-bold">Puzzle </h1>
+      <h1 className="text-4xl font-bold">Puzzle</h1>
       {!isSelected ? (
         <div className="max-w-2xl w-full">
           <p className="text-center mb-3 text-lg font-bold">Selecciona el nivel de dificultad</p>
@@ -60,6 +60,9 @@ function App() {
             </h3>
             <DropZone aspectRatio={aspectRatio} />
           </div>
+          <p className="text-center text-lg font-bold">
+            {isZonesCorrect ? 'Correcto' : 'Incorrecto'}
+          </p>
         </>
       )}
     </div>

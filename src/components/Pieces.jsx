@@ -6,7 +6,11 @@ import { Carousel } from './Carousel'
 export function Pieces({ pieces }) {
   const { zones } = useContext(DropZoneContext)
   console.log('zones', zones)
-  const filteredPieces = pieces.filter((piece) => !zones.includes(piece.src))
+  const filteredPieces = pieces.filter(
+    (piece) => !zones.some((zone) => zone?.src === piece.src && zone?.order === piece.order)
+  )
+
+  console.log('filteredPieces', filteredPieces)
   return (
     <Carousel>
       {filteredPieces.map((piece, i) => {
@@ -18,7 +22,7 @@ export function Pieces({ pieces }) {
           >
             <DraggablePiece
               ref={ref}
-              src={piece.src}
+              piece={piece}
               alt={`pieza ${i}`}
             />
           </div>

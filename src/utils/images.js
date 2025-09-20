@@ -27,7 +27,7 @@ export const splitImage = (imgSrc, rows, cols) => {
           )
           const piece = {
             src: canvas.toDataURL(),
-            isEnabled: true
+            order: y * cols + x
           }
           pieces.push(piece)
         }

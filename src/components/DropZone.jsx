@@ -59,7 +59,7 @@ export function DropZone({ aspectRatio }) {
             {zone ? (
               <DraggablePiece
                 ref={refZone}
-                src={zone}
+                piece={zone}
                 alt={`piece ${index}`}
                 isInDropZone={true}
                 zoneIndex={index}

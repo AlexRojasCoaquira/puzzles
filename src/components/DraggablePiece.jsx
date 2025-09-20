@@ -2,8 +2,9 @@ import { forwardRef, useContext, useState } from 'react'
 import { createPortal } from 'react-dom'
 import Draggable from 'react-draggable'
 import { DropZoneContext } from '../context/dropZone'
-function DraggablePiece({ src, alt, isInDropZone = false, zoneIndex = -1 }, ref) {
-  const { dropZones, setZones } = useContext(DropZoneContext)
+import confetti from 'canvas-confetti'
+function DraggablePiece({ piece, alt, isInDropZone = false, zoneIndex = -1 }, ref) {
+  const { dropZones, setZones, isZonesCorrect } = useContext(DropZoneContext)
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
   const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 })
@@ -62,9 +63,7 @@ function DraggablePiece({ src, alt, isInDropZone = false, zoneIndex = -1 }, ref)
           cx < zoneRect.right + margin &&
           cy > zoneRect.top - margin &&
           cy < zoneRect.bottom + margin
-        console.log('isInZone', isInZone)
         if (isInZone) {
-          console.log('endentra en el dropZone')
           // si está en el dropZone, entonces targetIndex es el índice del dropZone
           targetIndex = i
           return true
@@ -76,9 +75,9 @@ function DraggablePiece({ src, alt, isInDropZone = false, zoneIndex = -1 }, ref)
         //encontró un lugar para la pieza
         setZones((prev) => {
           const newZones = [...prev]
-          const prevIdx = newZones.findIndex((zone) => zone === src)
+          const prevIdx = newZones.findIndex((zone) => zone === piece.src)
           if (prevIdx !== -1) newZones[prevIdx] = null
-          newZones[targetIndex] = src
+          newZones[targetIndex] = piece
           return newZones
         })
       } else {
@@ -88,6 +87,17 @@ function DraggablePiece({ src, alt, isInDropZone = false, zoneIndex = -1 }, ref)
 
     console.log('Stopping drag')
     setIsDragging(false)
+    if (isZonesCorrect) {
+      console.log('ganaste')
+
+      //   confetti({
+      //     particleCount: 100,
+      //     spread: 70,
+      //     origin: { y: 0.6 }
+      //   })
+    } else {
+      console.log('todavia no ganaste')
+    }
   }
   return (
     <>
@@ -105,7 +115,7 @@ function DraggablePiece({ src, alt, isInDropZone = false, zoneIndex = -1 }, ref)
       >
         <img
           ref={ref}
-          src={src}
+          src={piece.src}
           alt={alt}
           draggable={false}
           onDragStart={(e) => e.preventDefault()}
@@ -119,7 +129,7 @@ function DraggablePiece({ src, alt, isInDropZone = false, zoneIndex = -1 }, ref)
       {isDragging &&
         createPortal(
           <img
-            src={src}
+            src={piece.src}
             alt={alt}
             draggable={false}
             style={{
