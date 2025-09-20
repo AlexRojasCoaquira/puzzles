@@ -49,6 +49,7 @@ function DraggablePiece({ src, alt, isInDropZone = false, zoneIndex = -1 }, ref)
           return newZones
         })
       }
+      setPosition({ x: 0, y: 0 })
     } else {
       let targetIndex = -1
       dropZones.current.some((zone, i) => {
