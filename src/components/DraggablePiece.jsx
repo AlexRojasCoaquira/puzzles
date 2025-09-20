@@ -73,7 +73,7 @@ function DraggablePiece({ src, alt }, ref) {
           alt={alt}
           draggable={false}
           onDragStart={(e) => e.preventDefault()}
-          className="relative max-w-40 w-full cursor-grab select-none"
+          className="relative max-w-30 sm:max-w-40 w-full cursor-grab select-none"
           style={{ opacity: isDragging ? 0 : 1 }}
         />
       </Draggable>

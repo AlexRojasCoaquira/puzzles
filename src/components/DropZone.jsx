@@ -1,7 +1,8 @@
 import { useContext } from 'react'
 import { DropZoneContext } from '../context/dropZone'
 export function DropZone({ aspectRatio }) {
-  const { dropZones, zones, setZones } = useContext(DropZoneContext)
+  const { dropZones, zones, setZones, sizeCanvas } = useContext(DropZoneContext)
+  console.log('sizeCanvas', sizeCanvas)
   const handleDoubleClick = (index) => {
     console.log('double click', index)
     setZones((prevState) => {
@@ -12,8 +13,12 @@ export function DropZone({ aspectRatio }) {
   }
   return (
     <div
-      className="grid grid-cols-3 grid-rows-3 w-full"
-      style={{ aspectRatio }}
+      className={`grid  max-w-3xl aspect-square`}
+      style={{
+        aspectRatio,
+        gridTemplateColumns: `repeat(${sizeCanvas.cols}, 1fr)`,
+        gridTemplateRows: `repeat(${sizeCanvas.rows}, 1fr)`
+      }}
     >
       {zones.map((zone, index) => (
         <div

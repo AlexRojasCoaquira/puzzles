@@ -6,4 +6,5 @@ Este proyecto se creará un pluzzle de una imagen, donde inicialmente estará re
 [✅] Agregar la funcionalidad de ser draggable
 [✅] Agregar carousel en sección de piezas
 [✅] Hacer que el draggable salga del contendor hacia el dropzone
+[✅] Crear lienzo de nxn
 [] Validar que el orden esté correcto

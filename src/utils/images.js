@@ -25,8 +25,11 @@ export const splitImage = (imgSrc, rows, cols) => {
             pieceWidth,
             pieceHeight
           )
-
-          pieces.push(canvas.toDataURL())
+          const piece = {
+            src: canvas.toDataURL(),
+            isEnabled: true
+          }
+          pieces.push(piece)
         }
       }
       resolve({
