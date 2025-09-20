@@ -31,7 +31,6 @@ export function DropZone({ aspectRatio }) {
               src={zone}
               alt={`piece ${index}`}
               className="w-full h-full object-cover"
-              onDoubleClick={() => handleDoubleClick(index)}
               title="Para remover la pieza, doble click"
             />
           ) : null}
