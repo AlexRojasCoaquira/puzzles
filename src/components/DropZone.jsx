@@ -1,16 +1,39 @@
-import { useContext } from 'react'
+import { useContext, useRef } from 'react'
 import { DropZoneContext } from '../context/dropZone'
 export function DropZone({ aspectRatio }) {
   const { dropZones, zones, setZones, sizeCanvas } = useContext(DropZoneContext)
+  const longPressTimer = useRef(null)
   console.log('sizeCanvas', sizeCanvas)
-  const handleDoubleClick = (index) => {
-    console.log('double click', index)
+
+  const removePiece = (index) => {
     setZones((prevState) => {
       const newZones = [...prevState]
       newZones[index] = null
       return newZones
     })
   }
+  const handleDoubleClick = (index) => {
+    removePiece(index)
+  }
+
+  const handleTouchStart = (index) => {
+    longPressTimer.current = setTimeout(() => {
+      removePiece(index)
+    }, 1000)
+  }
+  const handleTouchEnd = () => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current)
+      longPressTimer.current = null
+    }
+  }
+  const handleTouchMove = () => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current)
+      longPressTimer.current = null
+    }
+  }
+
   return (
     <div
       className={`grid  max-w-3xl aspect-square`}
@@ -25,6 +48,10 @@ export function DropZone({ aspectRatio }) {
           className={`${zone ? '' : 'border'}`}
           key={index}
           ref={(el) => (dropZones.current[index] = el)}
+          onDoubleClick={() => handleDoubleClick(index)}
+          onTouchStart={() => handleTouchStart(index)}
+          onTouchEnd={handleTouchEnd}
+          onTouchMove={handleTouchMove}
         >
           {zone ? (
             <img
