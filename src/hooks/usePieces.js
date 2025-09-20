@@ -1,17 +1,18 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { splitImage, shuffleArray } from '../utils/images'
-
-export function usePieces({ rows, cols } = { rows: 4, cols: 4 }) {
+import { DropZoneContext } from '../context/dropZone'
+export function usePieces() {
+  const { sizeCanvas } = useContext(DropZoneContext)
   const [pieces, setPieces] = useState([])
   const [aspectRatio, setAspectRatio] = useState(1)
   useEffect(() => {
     console.log('actualizamos las piezas')
-    splitImage('./prueba.jpg', rows, cols).then((result) => {
+    splitImage('./dualipa.jpg', sizeCanvas.rows, sizeCanvas.cols).then((result) => {
       const shuffledPieces = shuffleArray(result.pieces)
       setPieces(shuffledPieces)
       setAspectRatio(result.aspectRatio)
     })
-  }, [rows, cols])
+  }, [sizeCanvas])
 
   return { pieces, aspectRatio }
 }
