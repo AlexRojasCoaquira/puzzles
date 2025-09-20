@@ -1,5 +1,6 @@
-import { useContext, useRef } from 'react'
+import { useContext, useRef, createRef } from 'react'
 import { DropZoneContext } from '../context/dropZone'
+import DraggablePiece from './DraggablePiece'
 export function DropZone({ aspectRatio }) {
   const { dropZones, zones, setZones, sizeCanvas } = useContext(DropZoneContext)
   const longPressTimer = useRef(null)
@@ -43,26 +44,39 @@ export function DropZone({ aspectRatio }) {
         gridTemplateRows: `repeat(${sizeCanvas.rows}, 1fr)`
       }}
     >
-      {zones.map((zone, index) => (
-        <div
-          className={`${zone ? '' : 'border'}`}
-          key={index}
-          ref={(el) => (dropZones.current[index] = el)}
-          onDoubleClick={() => handleDoubleClick(index)}
-          onTouchStart={() => handleTouchStart(index)}
-          onTouchEnd={handleTouchEnd}
-          onTouchMove={handleTouchMove}
-        >
-          {zone ? (
+      {zones.map((zone, index) => {
+        const refZone = createRef(null)
+        return (
+          <div
+            className={`${zone ? '' : 'border'}`}
+            key={index}
+            ref={(el) => (dropZones.current[index] = el)}
+            onDoubleClick={() => handleDoubleClick(index)}
+            onTouchStart={() => handleTouchStart(index)}
+            onTouchEnd={handleTouchEnd}
+            onTouchMove={handleTouchMove}
+          >
+            {zone ? (
+              <DraggablePiece
+                ref={refZone}
+                src={zone}
+                alt={`piece ${index}`}
+                isInDropZone={true}
+                zoneIndex={index}
+                onDoubleClick={() => removePiece(index)}
+              />
+            ) : null}
+            {/* {zone ? (
             <img
               src={zone}
               alt={`piece ${index}`}
               className="w-full h-full object-cover"
               title="Para remover la pieza, doble click"
             />
-          ) : null}
-        </div>
-      ))}
+          ) : null} */}
+          </div>
+        )
+      })}
     </div>
   )
 }

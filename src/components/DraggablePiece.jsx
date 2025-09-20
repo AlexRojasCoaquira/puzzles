@@ -2,7 +2,7 @@ import { forwardRef, useContext, useState } from 'react'
 import { createPortal } from 'react-dom'
 import Draggable from 'react-draggable'
 import { DropZoneContext } from '../context/dropZone'
-function DraggablePiece({ src, alt }, ref) {
+function DraggablePiece({ src, alt, isInDropZone = false, zoneIndex = -1 }, ref) {
   const { dropZones, setZones } = useContext(DropZoneContext)
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
@@ -23,36 +23,66 @@ function DraggablePiece({ src, alt }, ref) {
     setIsDragging(true)
   }
 
-  const handleStop = (e) => {
+  const handleStop = () => {
     const cx = dragPosition.x
     const cy = dragPosition.y
 
-    let targetIndex = -1
-    dropZones.current.some((zone, i) => {
-      //iteramos sobre los dropZones para ver si la pieza está en alguno de ellos
-      if (!zone) return false
-      const zoneRect = zone.getBoundingClientRect()
-      const isInZone =
-        cx > zoneRect.left && cx < zoneRect.right && cy > zoneRect.top && cy < zoneRect.bottom
-      if (isInZone) {
-        // si está en el dropZone, entonces targetIndex es el índice del dropZone
-        targetIndex = i
-        return true
-      }
-      return false
-    })
-
-    if (targetIndex !== -1) {
-      //encontró un lugar para la pieza
-      setZones((prev) => {
-        const newZones = [...prev]
-        const prevIdx = newZones.findIndex((zone) => zone === src)
-        if (prevIdx !== -1) newZones[prevIdx] = null
-        newZones[targetIndex] = src
-        return newZones
+    if (isInDropZone) {
+      let targetIndex = -1
+      dropZones.current.some((zone, i) => {
+        if (!zone || i === zoneIndex) return false
+        const zoneRect = zone.getBoundingClientRect()
+        const isInZone =
+          cx > zoneRect.left && cx < zoneRect.right && cy > zoneRect.top && cy < zoneRect.bottom
+        if (isInZone) {
+          targetIndex = i
+          return true
+        }
+        return false
       })
+      if (targetIndex !== -1) {
+        setZones((prev) => {
+          const newZones = [...prev]
+          const temp = newZones[zoneIndex]
+          newZones[zoneIndex] = newZones[targetIndex]
+          newZones[targetIndex] = temp
+          return newZones
+        })
+      }
     } else {
-      setPosition({ x: 0, y: 0 })
+      let targetIndex = -1
+      dropZones.current.some((zone, i) => {
+        //iteramos sobre los dropZones para ver si la pieza está en alguno de ellos
+        if (!zone) return false
+        const zoneRect = zone.getBoundingClientRect()
+        const margin = 20
+        const isInZone =
+          cx > zoneRect.left - margin &&
+          cx < zoneRect.right + margin &&
+          cy > zoneRect.top - margin &&
+          cy < zoneRect.bottom + margin
+        console.log('isInZone', isInZone)
+        if (isInZone) {
+          console.log('endentra en el dropZone')
+          // si está en el dropZone, entonces targetIndex es el índice del dropZone
+          targetIndex = i
+          return true
+        }
+        return false
+      })
+
+      if (targetIndex !== -1) {
+        //encontró un lugar para la pieza
+        setZones((prev) => {
+          const newZones = [...prev]
+          const prevIdx = newZones.findIndex((zone) => zone === src)
+          if (prevIdx !== -1) newZones[prevIdx] = null
+          newZones[targetIndex] = src
+          return newZones
+        })
+      } else {
+        setPosition({ x: 0, y: 0 })
+      }
     }
 
     console.log('Stopping drag')
@@ -70,6 +100,7 @@ function DraggablePiece({ src, alt }, ref) {
           setDragPosition({ x: p.clientX, y: p.clientY })
         }}
         onStop={(e, data) => handleStop(e, data)}
+        bounds={isInDropZone ? 'parent' : undefined}
       >
         <img
           ref={ref}
@@ -77,7 +108,9 @@ function DraggablePiece({ src, alt }, ref) {
           alt={alt}
           draggable={false}
           onDragStart={(e) => e.preventDefault()}
-          className="relative touch-none max-w-30 sm:max-w-40 w-full cursor-grab select-none"
+          className={`relative touch-none w-full cursor-grab select-none ${
+            isInDropZone ? 'h-full object-cover cursor-move' : 'max-w-30 sm:max-w-40'
+          }`}
           style={{ opacity: isDragging ? 0 : 1 }}
         />
       </Draggable>

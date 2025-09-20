@@ -5,8 +5,8 @@ import { usePieces } from './hooks/usePieces'
 import { Pieces } from './components/Pieces'
 
 function App() {
-  const rows = 5
-  const cols = 5
+  const rows = 3
+  const cols = 3
   const { pieces, aspectRatio } = usePieces({ rows, cols })
   return (
     <DropZoneProvider
@@ -15,7 +15,7 @@ function App() {
     >
       <div className="flex gap-4 flex-col items-center h-100dvh p-4">
         <h1 className="text-4xl font-bold">Puzzle</h1>
-        <div className="max-w-2xl w-full max-h-24 sm:max-h-32 h-full">
+        <div className="max-w-2xl w-full h-24 sm:max-h-32">
           <Pieces pieces={pieces} />
         </div>
         <div className="max-w-2xl w-full">
