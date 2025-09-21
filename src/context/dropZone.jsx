@@ -14,9 +14,7 @@ export const DropZoneProvider = ({ children }) => {
   const isZonesCorrect = useMemo(() => {
     return zones.every((zone, index) => zone !== null && zone?.order === index)
   }, [zones])
-  console.log('zones', zones)
   useEffect(() => {
-    console.log('actualizamos las zonas')
     setZones(Array(sizeCanvas.rows * sizeCanvas.cols).fill(null))
   }, [sizeCanvas])
 
@@ -27,7 +25,7 @@ export const DropZoneProvider = ({ children }) => {
         spread: 70,
         origin: { y: 0.6 }
       })
-      audioRef.current = new Audio('/dualipa.mp3')
+      audioRef.current = new Audio('/henry.mp3')
       audioRef.current.play()
       hasPlayed.current = true
     }

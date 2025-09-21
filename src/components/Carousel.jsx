@@ -9,7 +9,6 @@ export function Carousel({ children, step = 300 }) {
   }
 
   const onKeyDown = (e) => {
-    console.log(e.key)
     if (e.key === 'ArrowLeft') scrollBy(-step)
     if (e.key === 'ArrowRight') scrollBy(step)
   }

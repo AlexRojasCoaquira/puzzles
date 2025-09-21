@@ -6,8 +6,7 @@ export function usePieces() {
   const [pieces, setPieces] = useState([])
   const [aspectRatio, setAspectRatio] = useState(1)
   useEffect(() => {
-    console.log('actualizamos las piezas')
-    splitImage('./dualipa.jpg', sizeCanvas.rows, sizeCanvas.cols).then((result) => {
+    splitImage('./henry.jfif', sizeCanvas.rows, sizeCanvas.cols).then((result) => {
       const shuffledPieces = shuffleArray(result.pieces)
       setPieces(shuffledPieces)
       setAspectRatio(result.aspectRatio)

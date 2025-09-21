@@ -1,10 +1,9 @@
 import { useContext, useRef, createRef } from 'react'
 import { DropZoneContext } from '../context/dropZone'
 import DraggablePiece from './DraggablePiece'
-export function DropZone({ aspectRatio }) {
+export function DropZone({ aspectRatio, title }) {
   const { dropZones, zones, setZones, sizeCanvas } = useContext(DropZoneContext)
   const longPressTimer = useRef(null)
-  console.log('sizeCanvas', sizeCanvas)
 
   const removePiece = (index) => {
     setZones((prevState) => {
@@ -36,47 +35,44 @@ export function DropZone({ aspectRatio }) {
   }
 
   return (
-    <div
-      className={`grid  max-w-3xl aspect-square`}
-      style={{
-        aspectRatio,
-        gridTemplateColumns: `repeat(${sizeCanvas.cols}, 1fr)`,
-        gridTemplateRows: `repeat(${sizeCanvas.rows}, 1fr)`
-      }}
-    >
-      {zones.map((zone, index) => {
-        const refZone = createRef(null)
-        return (
-          <div
-            className={`${zone ? '' : 'border'}`}
-            key={index}
-            ref={(el) => (dropZones.current[index] = el)}
-            onDoubleClick={() => handleDoubleClick(index)}
-            onTouchStart={() => handleTouchStart(index)}
-            onTouchEnd={handleTouchEnd}
-            onTouchMove={handleTouchMove}
-          >
-            {zone ? (
-              <DraggablePiece
-                ref={refZone}
-                piece={zone}
-                alt={`piece ${index}`}
-                isInDropZone={true}
-                zoneIndex={index}
-                onDoubleClick={() => removePiece(index)}
-              />
-            ) : null}
-            {/* {zone ? (
-            <img
-              src={zone}
-              alt={`piece ${index}`}
-              className="w-full h-full object-cover"
-              title="Para remover la pieza, doble click"
-            />
-          ) : null} */}
-          </div>
-        )
-      })}
+    <div className="max-w-2xl w-full mt-5">
+      <h3 className="text-center mb-3 text-lg font-bold">
+        {title || 'Ordena las piezas y descubre la imagen'}
+      </h3>
+      <div
+        className={`grid  max-w-3xl aspect-square`}
+        style={{
+          aspectRatio,
+          gridTemplateColumns: `repeat(${sizeCanvas.cols}, 1fr)`,
+          gridTemplateRows: `repeat(${sizeCanvas.rows}, 1fr)`
+        }}
+      >
+        {zones.map((zone, index) => {
+          const refZone = createRef(null)
+          return (
+            <div
+              className={`${zone ? '' : 'border'}`}
+              key={index}
+              ref={(el) => (dropZones.current[index] = el)}
+              onDoubleClick={() => handleDoubleClick(index)}
+              onTouchStart={() => handleTouchStart(index)}
+              onTouchEnd={handleTouchEnd}
+              onTouchMove={handleTouchMove}
+            >
+              {zone ? (
+                <DraggablePiece
+                  ref={refZone}
+                  piece={zone}
+                  alt={`piece ${index}`}
+                  isInDropZone={true}
+                  zoneIndex={index}
+                  onDoubleClick={() => removePiece(index)}
+                />
+              ) : null}
+            </div>
+          )
+        })}
+      </div>
     </div>
   )
 }

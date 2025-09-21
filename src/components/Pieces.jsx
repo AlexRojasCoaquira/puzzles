@@ -5,29 +5,29 @@ import { Carousel } from './Carousel'
 
 export function Pieces({ pieces }) {
   const { zones } = useContext(DropZoneContext)
-  console.log('zones', zones)
   const filteredPieces = pieces.filter(
     (piece) => !zones.some((zone) => zone?.src === piece.src && zone?.order === piece.order)
   )
 
-  console.log('filteredPieces', filteredPieces)
   return (
-    <Carousel>
-      {filteredPieces.map((piece, i) => {
-        const ref = createRef()
-        return (
-          <div
-            key={piece.src}
-            className="snap-start shrink-0 "
-          >
-            <DraggablePiece
-              ref={ref}
-              piece={piece}
-              alt={`pieza ${i}`}
-            />
-          </div>
-        )
-      })}
-    </Carousel>
+    <section className="max-w-2xl w-full h-24 sm:max-h-32 mt-5">
+      <Carousel>
+        {filteredPieces.map((piece, i) => {
+          const ref = createRef()
+          return (
+            <div
+              key={piece.src}
+              className="snap-start shrink-0 "
+            >
+              <DraggablePiece
+                ref={ref}
+                piece={piece}
+                alt={`pieza ${i}`}
+              />
+            </div>
+          )
+        })}
+      </Carousel>
+    </section>
   )
 }

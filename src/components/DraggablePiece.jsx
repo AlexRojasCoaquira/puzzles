@@ -2,9 +2,8 @@ import { forwardRef, useContext, useState } from 'react'
 import { createPortal } from 'react-dom'
 import Draggable from 'react-draggable'
 import { DropZoneContext } from '../context/dropZone'
-import confetti from 'canvas-confetti'
 function DraggablePiece({ piece, alt, isInDropZone = false, zoneIndex = -1 }, ref) {
-  const { dropZones, setZones, isZonesCorrect } = useContext(DropZoneContext)
+  const { dropZones, setZones } = useContext(DropZoneContext)
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
   const [dragPosition, setDragPosition] = useState({ x: 0, y: 0 })
@@ -13,9 +12,7 @@ function DraggablePiece({ piece, alt, isInDropZone = false, zoneIndex = -1 }, re
     'touches' in e ? e.touches[0] : 'changedTouches' in e ? e.changedTouches[0] : e
 
   const handleStart = (e) => {
-    console.log('Starting drag')
     const rect = ref.current?.getBoundingClientRect()
-    console.log('rect', rect)
     if (rect) {
       setImageSize({ width: rect.width, height: rect.height })
     }
@@ -85,7 +82,6 @@ function DraggablePiece({ piece, alt, isInDropZone = false, zoneIndex = -1 }, re
       }
     }
 
-    console.log('Stopping drag')
     setIsDragging(false)
   }
   return (
