@@ -9,6 +9,8 @@ export const DropZoneProvider = ({ children }) => {
   const dropZones = useRef([])
   const [sizeCanvas, setSizeCanvas] = useState({ rows, cols })
   const [zones, setZones] = useState(Array(rows * cols).fill(null))
+  const hasPlayed = useRef(false)
+  const audioRef = useRef(null)
   const isZonesCorrect = useMemo(() => {
     return zones.every((zone, index) => zone !== null && zone?.order === index)
   }, [zones])
@@ -19,12 +21,20 @@ export const DropZoneProvider = ({ children }) => {
   }, [sizeCanvas])
 
   useEffect(() => {
-    if (isZonesCorrect) {
+    if (isZonesCorrect && !hasPlayed.current) {
       confetti({
-        particleCount: 100,
+        particleCount: 200,
         spread: 70,
         origin: { y: 0.6 }
       })
+      audioRef.current = new Audio('/dualipa.mp3')
+      audioRef.current.play()
+      hasPlayed.current = true
+    }
+    if (!isZonesCorrect && audioRef.current) {
+      audioRef.current.pause()
+      audioRef.current.currentTime = 0
+      hasPlayed.current = false
     }
   }, [isZonesCorrect])
 

@@ -87,17 +87,6 @@ function DraggablePiece({ piece, alt, isInDropZone = false, zoneIndex = -1 }, re
 
     console.log('Stopping drag')
     setIsDragging(false)
-    if (isZonesCorrect) {
-      console.log('ganaste')
-
-      //   confetti({
-      //     particleCount: 100,
-      //     spread: 70,
-      //     origin: { y: 0.6 }
-      //   })
-    } else {
-      console.log('todavia no ganaste')
-    }
   }
   return (
     <>

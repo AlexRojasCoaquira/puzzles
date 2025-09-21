@@ -5,7 +5,7 @@ import { usePieces } from './hooks/usePieces'
 import { Pieces } from './components/Pieces'
 import { DropZoneContext } from './context/dropZone'
 function App() {
-  const { setSizeCanvas, isZonesCorrect } = useContext(DropZoneContext)
+  const { setSizeCanvas, isZonesCorrect, setZones, sizeCanvas } = useContext(DropZoneContext)
   const { pieces, aspectRatio } = usePieces()
   const [isSelected, setIsSelected] = useState(false)
 
@@ -13,13 +13,21 @@ function App() {
     setSizeCanvas({ rows, cols })
     setIsSelected(true)
   }
+
+  const handleReset = () => {
+    setIsSelected(false)
+    setZones(Array(sizeCanvas.rows * sizeCanvas.cols).fill(null))
+  }
+
   return (
     <div className="flex gap-4 flex-col items-center h-100dvh p-4">
       <h1 className="text-4xl font-bold">Puzzle</h1>
       {!isSelected ? (
         <div className="max-w-2xl w-full">
-          <p className="text-center mb-3 text-lg font-bold">Selecciona el nivel de dificultad</p>
-          <div className="flex gap-4 justify-around">
+          <p className="text-center mb-3 text-lg font-bold mt-4">
+            Selecciona el nivel de dificultad
+          </p>
+          <div className="flex gap-4 justify-around my-10">
             <button
               className="border-2 p-2 rounded-md size-40 text-white font-bold
                      bg-gradient-to-r from-purple-500 to-pink-500
@@ -51,18 +59,28 @@ function App() {
         </div>
       ) : (
         <>
-          <div className="max-w-2xl w-full h-24 sm:max-h-32">
+          <section className="max-w-2xl w-full h-24 sm:max-h-32 mt-5">
             <Pieces pieces={pieces} />
-          </div>
-          <div className="max-w-2xl w-full">
+          </section>
+          <div className="max-w-2xl w-full mt-5">
             <h3 className="text-center mb-3 text-lg font-bold">
               Ordena las piezas y descubre la imagen
             </h3>
             <DropZone aspectRatio={aspectRatio} />
           </div>
-          <p className="text-center text-lg font-bold">
-            {isZonesCorrect ? 'Correcto' : 'Incorrecto'}
-          </p>
+          <div className="text-center text-lg font-bold">
+            {isZonesCorrect && (
+              <>
+                <p className="text-center text-lg font-bold">¡Felicidades, has ganado!</p>
+              </>
+            )}
+            <button
+              className="bg-blue-500 text-white p-2 rounded-md"
+              onClick={() => handleReset()}
+            >
+              Reiniciar
+            </button>
+          </div>
         </>
       )}
     </div>
