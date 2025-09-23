@@ -1,11 +1,6 @@
-import { useContext } from 'react'
-import { DropZoneContext } from '../context/dropZone'
 export function DificultySelector({ onSelect }) {
-  const { setSizeCanvas } = useContext(DropZoneContext)
-
   const handleRowsAndCols = (rows, cols) => {
-    setSizeCanvas({ rows, cols })
-    onSelect(true)
+    onSelect({ rows, cols })
   }
   return (
     <div className="max-w-2xl w-full">

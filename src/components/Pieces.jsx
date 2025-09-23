@@ -2,15 +2,17 @@ import { createRef, useContext } from 'react'
 import { DropZoneContext } from '../context/dropZone'
 import DraggablePiece from './DraggablePiece'
 import { Carousel } from './Carousel'
+import { usePieces } from '../hooks/usePieces'
 
-export function Pieces({ pieces }) {
-  const { zones } = useContext(DropZoneContext)
-  const filteredPieces = pieces.filter(
-    (piece) => !zones.some((zone) => zone?.src === piece.src && zone?.order === piece.order)
+export function Pieces() {
+  const { zones, sizeCanvas } = useContext(DropZoneContext)
+  const { pieces } = usePieces({ sizeCanvas })
+  const filteredPieces = (pieces ?? []).filter(
+    (piece) => !(zones ?? []).some((zone) => zone?.src === piece.src && zone?.order === piece.order)
   )
 
   return (
-    <section className="max-w-2xl w-full h-24 sm:max-h-32 mt-5">
+    <section className="max-w-2xl w-full sm:max-h-full mt-5">
       <Carousel>
         {filteredPieces.map((piece, i) => {
           const ref = createRef()
